@@ -139,7 +139,7 @@
 		(at 129 101.08 180)
 		(descr "Through hole straight pin header, 1x03, 2.54mm pitch, single row")
 		(tags "Through hole pin header THT 1x03 2.54mm single row")
-		(property "Reference" "Servo1"
+		(property "Reference" "Valve Servo Fuel"
 			(at -3 2.38 90)
 			(layer "F.SilkS")
 			(uuid "aafe1c8b-3ef6-464f-8856-028419585066")
@@ -699,7 +699,7 @@
 		(descr "CP, Radial series, Radial, pin pitch=2.00mm, , diameter=5mm, Electrolytic Capacitor")
 		(tags "CP Radial series Radial pin pitch 2.00mm  diameter 5mm Electrolytic Capacitor")
 		(property "Reference" "C1"
-			(at 1 4.3 0)
+			(at -2.9 0 0)
 			(layer "F.SilkS")
 			(uuid "827ef2e2-cab0-4f4e-8d92-3307c0341a51")
 			(effects
@@ -2082,7 +2082,7 @@
 		(at 135 119 180)
 		(descr "JST EH series connector, B3B-EH-A (http://www.jst-mfg.com/product/pdf/eng/eEH.pdf), generated with kicad-footprint-generator")
 		(tags "connector JST EH vertical")
-		(property "Reference" "Flow1"
+		(property "Reference" "Flow Sensor Fuel"
 			(at 2.5 -2.8 0)
 			(layer "F.SilkS")
 			(uuid "6711d91f-feeb-4950-bfdd-d389788f634d")
@@ -2768,7 +2768,7 @@
 		(at 135 101.08 180)
 		(descr "Through hole straight pin header, 1x03, 2.54mm pitch, single row")
 		(tags "Through hole pin header THT 1x03 2.54mm single row")
-		(property "Reference" "Servo2"
+		(property "Reference" "Valve Servo Oxi"
 			(at -2.8 2.38 90)
 			(layer "F.SilkS")
 			(uuid "1a64a420-a87d-41ec-8cee-7667d71c03f0")
@@ -3072,7 +3072,7 @@
 		(at 135 128 180)
 		(descr "JST EH series connector, B3B-EH-A (http://www.jst-mfg.com/product/pdf/eng/eEH.pdf), generated with kicad-footprint-generator")
 		(tags "connector JST EH vertical")
-		(property "Reference" "Flow2"
+		(property "Reference" "Flow Sensor Oxi"
 			(at 2.5 -2.7 0)
 			(layer "F.SilkS")
 			(uuid "80e54f3c-9774-4cc4-a7eb-e85896605f88")
