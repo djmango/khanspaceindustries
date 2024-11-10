@@ -1,23 +1,19 @@
 #include <Servo.h>
 
+#define SERVO_PIN_FUEL 2       // Digital pin 2 for the fuel valve servo
+#define SERVO_PIN_OXI 3        // Digital pin 3 for the oxidizer valve servo
+#define FLOW_SENSOR_PIN_FUEL 4 // Digital pin 4 for the fuel flow sensor
+#define FLOW_SENSOR_PIN_OXI 5  // Digital pin 5 for the oxidizer flow sensor
+
 // Valve control variables
-#define SERVO_PIN_FUEL 2 // Digital pin 2 for the fuel valve servo
-#define SERVO_PIN_OXI 3  // Digital pin 3 for the oxidizer valve servo
-const int POS_MIN = 115;
-const int POS_MAX = 180;
 const int POS_OPEN = 115;
 const int POS_CLOSE = 180;
-int desiredPosition = POS_CLOSE;
+int desiredPositionFuel = POS_CLOSE;
+int desiredPositionOxi = POS_CLOSE;
 Servo valveServoFuel;
 Servo valveServoOxi;
 
-unsigned long lastSerialTime = 0;
-const unsigned long SERIAL_TIMEOUT =
-    1000; // Close valves if no serial data for 1 second
-
 // Flow sensor variables
-#define FLOW_SENSOR_PIN_FUEL 4 // Digital pin 4 for the fuel flow sensor
-#define FLOW_SENSOR_PIN_OXI 5  // Digital pin 5 for the oxidizer flow sensor
 volatile int pulseCountFuel = 0;
 volatile int pulseCountOxi = 0;
 float flowRateFuel = 0.0;
@@ -26,6 +22,12 @@ unsigned long previousMillis =
     0; // Track the last time we updated the flow rate
 const unsigned long interval =
     100; // Shorter interval (100 ms) for more frequent updates
+
+// Serial communication variables
+unsigned long lastSerialTime = 0;
+const unsigned long SERIAL_TIMEOUT =
+    1000; // Close valves if no serial data for 1 second
+unsigned long currentMillis = millis();
 
 void setup() {
   // Set baud rate to 115200
@@ -54,14 +56,15 @@ void setup() {
 // The ground control software will then plot the data and show it to the user
 // The format is as follows:
 // time, flow rate fuel, flow rate oxi, pulse count fuel, pulse count oxi,
-// desired position, open_or_close
+// desired position fuel, desired position oxi, is_emergency
 void loop() {
-  unsigned long currentMillis = millis();
+  currentMillis = millis();
 
   // Check for serial timeout safety
-  if (currentMillis - lastSerialTime > SERIAL_TIMEOUT) {
+  if (isEmergency()) {
     // Communication lost - emergency close
-    desiredPosition = POS_CLOSE;
+    desiredPositionFuel = POS_CLOSE;
+    desiredPositionOxi = POS_CLOSE;
     valveServoFuel.write(POS_CLOSE);
     valveServoOxi.write(POS_CLOSE);
   }
@@ -88,9 +91,11 @@ void loop() {
     Serial.print(",");
     Serial.print(pulseCountOxi);
     Serial.print(",");
-    Serial.print(desiredPosition);
+    Serial.print(desiredPositionFuel);
     Serial.print(",");
-    Serial.println(desiredPosition == POS_OPEN ? 1 : 0);
+    Serial.print(desiredPositionOxi);
+    Serial.print(",");
+    Serial.println(isEmergency() ? 1 : 0);
 
     // Reset pulse count after each calculation
     pulseCountFuel = 0;
@@ -98,24 +103,27 @@ void loop() {
   }
 
   // Check for servo control commands
+  // Process commands from serial input
+  // Format: "fuel,oxi" where each value is 1 (open) or 0 (close)
+  // Example: "1,0" opens fuel valve and closes oxidizer valve
   if (Serial.available() > 0) {
-    char command = Serial.read();
-
-    // Update last serial communication time
+    // Read the command and update communication time
+    String command = Serial.readStringUntil('\n');
     lastSerialTime = currentMillis;
 
-    // Safety checks before moving the servos
-    if (command == '1') { // Open valve command
-      desiredPosition = POS_OPEN;
-      valveServoFuel.write(POS_OPEN);
-      valveServoOxi.write(POS_OPEN);
-    } else if (command == '0') { // Close valve command
-      desiredPosition = POS_CLOSE;
-      valveServoFuel.write(POS_CLOSE);
-      valveServoOxi.write(POS_CLOSE);
+    // Parse the two valve commands
+    int commaIndex = command.indexOf(',');
+    if (commaIndex != -1) {
+      int fuelCommand = command.substring(0, commaIndex).toInt();
+      int oxiCommand = command.substring(commaIndex + 1).toInt();
+
+      desiredPositionFuel = fuelCommand ? POS_OPEN : POS_CLOSE;
+      desiredPositionOxi = oxiCommand ? POS_OPEN : POS_CLOSE;
+      valveServoFuel.write(desiredPositionFuel);
+      valveServoOxi.write(desiredPositionOxi);
     }
 
-    // Clear any remaining characters in the serial buffer
+    // Clear the serial buffer
     while (Serial.available() > 0) {
       Serial.read();
     }
@@ -125,3 +133,5 @@ void loop() {
 // Interrupt Service Routine to count pulses
 void countPulseFuel() { pulseCountFuel++; }
 void countPulseOxi() { pulseCountOxi++; }
+
+bool isEmergency() { return currentMillis - lastSerialTime > SERIAL_TIMEOUT; }
