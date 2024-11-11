@@ -1,0 +1,12 @@
+[package]
+name = "lab_assist"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.93"
+async-openai = "0.25.0"
+chrono = "0.4.38"
+dotenv = "0.15.0"
+regex = "1.11.1"
+tokio = { version = "1.41.1", features = ["full"] }
