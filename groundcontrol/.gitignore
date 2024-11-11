@@ -14,3 +14,5 @@ target/
 
 # Additional .gitignore for Rust/Cargo projects
 **/*.rs.orig
+
+logs/
