@@ -456,7 +456,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "Valve.kicad_pro",
+    "filename": "Engine Control Unit.kicad_pro",
     "version": 1
   },
   "net_settings": {
@@ -491,7 +491,7 @@
       "gencad": "",
       "idf": "",
       "netlist": "",
-      "plot": "gerbers_v3/",
+      "plot": "gerbers/",
       "pos_files": "",
       "specctra_dsn": "",
       "step": "",
