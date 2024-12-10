@@ -1,10 +1,10 @@
 #include <Servo.h>
 
-#define FLOW_SENSOR_PIN_FUEL 2 // Digital pin 2 for the fuel flow sensor
-#define FLOW_SENSOR_PIN_OXI 3  // Digital pin 3 for the oxidizer flow sensor
+#define FLOW_SENSOR_PIN_FUEL 5 // Digital pin 2 for the fuel flow sensor
+#define FLOW_SENSOR_PIN_OXI 4  // Digital pin 3 for the oxidizer flow sensor
 
-#define SERVO_PIN_FUEL 4       // Digital pin 4 for the fuel valve servo
-#define SERVO_PIN_OXI 5        // Digital pin 5 for the oxidizer valve servo
+#define SERVO_PIN_FUEL 2       // Digital pin 4 for the fuel valve servo
+#define SERVO_PIN_OXI 3        // Digital pin 5 for the oxidizer valve servo
 
 // Valve control variables
 const int POS_OPEN = 115;

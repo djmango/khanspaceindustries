@@ -9,7 +9,7 @@ use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
-const PORT_NAME: &str = "/dev/cu.usbserial-210";
+const PORT_NAME: &str = "/dev/cu.usbserial-10";
 const BAUD_RATE: u32 = 115_200;
 const TIMEOUT_MS: u64 = 100;
 const BROADCAST_INTERVAL_MS: u64 = 100;
